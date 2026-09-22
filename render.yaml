@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: pptbuilder-backend
+    runtime: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pptbuilder-db
+          property: connectionString
+      - key: GROQ_API_KEY
+        sync: false # Set manually in Render dashboard
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: PYTHON_VERSION
+        value: 3.10.0
+
+databases:
+  - name: pptbuilder-db
+    plan: free
